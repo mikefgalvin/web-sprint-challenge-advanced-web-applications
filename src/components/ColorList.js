@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
 import EditMenu from './EditMenu';
-import { useParams, useHistory } from "react-router-dom";
 import { axiosWithAuth } from '../utils/axiosWithAuth';
 
 const initialColor = {
@@ -9,11 +7,10 @@ const initialColor = {
   code: { hex: "" }
 };
 
-const ColorList = ({ colors, updateColors }) => {
+const ColorList = ({ colors, updateColors, triggerLoad }) => {
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
   // const params = useParams();
-  const { push } = useHistory();
   // const paramId = props.match.params.id;
 
 
@@ -31,7 +28,7 @@ const ColorList = ({ colors, updateColors }) => {
         console.log('res', res)
         updateColors(res.data)
         // push(`/bubbles`)
-        window.location.href = `/bubbles`
+        // window.location.href = `/bubbles`
       })
       .catch(err => {
         console.log(err)
@@ -43,11 +40,10 @@ const ColorList = ({ colors, updateColors }) => {
     .delete(`colors/${color.id}`)
     .then( res => {
       console.log('delete', res)
-      // setTimeout(() => { 
-      updateColors(res.data)
-    // }, 3000)
-      push(`/bubbles`)
-      // window.location.href = '/bubbles';
+      triggerLoad();
+      // updateColors(res.data)
+      // push(`/bubbles`)
+      // window.location.reload();
     })
     .catch(err => {
       console.log('error:', err)

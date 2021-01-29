@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { axiosWithAuth } from '../utils/axiosWithAuth';
+import fetchFiles from '../utils/fetchFiles';
 
 import Bubbles from "./Bubbles";
 import ColorList from "./ColorList";
@@ -9,37 +10,53 @@ import ColorList from "./ColorList";
 
 const BubblePage = () => {
   const [colorList, setColorList] = useState([]);
+  const [status, setStatus] = useState('loading')
 
   // const token = localStorage.getItem('token');
   // console.log('token', token)
 
   const getData = () => {
-    axiosWithAuth().get('colors')
+    fetchFiles()
       .then (res => {
         setColorList(res.data)
         // this.setState({
         //   friends: res.data
         // })
       })
-      .catch (err => {
-        console.log(err.response)
-      })
+      // .catch (err => {
+      //   console.log(err.response)
+      // })
   };
 
   useEffect(()=> {
-    getData();
-  }, [])
+    if(status === 'loading') {
+      getData();
+    }
+    setStatus('idle')
+    
+  }, [status])
+
+  const triggerLoad = () => {
+    setStatus('loading')
+  }
 
   const updateColors = (colorIn) => {
-		const idx = colorList.findIndex(el => el.id === colorIn.id);
-		if (idx !== -1) {
-			setColorList([...colorList, colorList[idx] = { ...colorIn }]);
-		}
+		// const idx = colorList.findIndex(el => el.id === colorIn.id);
+		// if (idx !== -1) {
+		// 	setColorList([...colorList, colorList[idx] = { ...colorIn }]);
+    // }
+    
+      setColorList(colorList.map(color => {
+        if(color.id === colorIn.id) {
+          return colorIn
+        }
+        else { return color }
+      }))
 	}
 
   return (
     <>
-      <ColorList colors={colorList} updateColors={updateColors} />
+      <ColorList colors={colorList} updateColors={updateColors} triggerLoad={triggerLoad} />
       <Bubbles colors={colorList} />
     </>
   );

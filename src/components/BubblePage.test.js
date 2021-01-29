@@ -1,8 +1,12 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import BubblePage from "./BubblePage";
+import fetchFiles from '../utils/fetchFiles';
 
-const colors = [
+jest.mock('../utils/fetchFiles');
+
+const res = {
+  data: [
   {
       color: "aliceblue",
       code: {
@@ -11,30 +15,42 @@ const colors = [
       id: 1
   },
   {
-    color: "irishgreen",
+    color: "irishGreen",
     code: {
       hex: "#ffffff"
     },
     id: 2
 }
-];
+]
+};
 
 test("Renders BubblePage without errors", () => {
   // Finish this test
+  fetchFiles.mockResolvedValueOnce(res)
   render(<BubblePage colors={[]}/>)
 });
 
-test("Fetches data and renders the bubbles on mounting", () => {
+test("Fetches data and renders the bubbles on mounting", async () => {
   // Finish this test
+  jest.resetAllMocks()
+  fetchFiles.mockResolvedValueOnce(res)
   const { rerender } = render(<BubblePage colors={[]}/>);
 
-  let colorObjects = screen.queryAllByTestId('colorTest');
-    expect(colorObjects).toStrictEqual([]);
-    expect(colorObjects).toHaveLength(0);
+  // let colorObjects = screen.queryAllByTestId('colorTest');
+  //   expect(colorObjects).toStrictEqual([]);
+  //   expect(colorObjects).toHaveLength(0);
 
-    rerender(<BubblePage colors={colors}/>);
-    colorObjects = screen.queryAllByTestId('colorTest');
-    expect(colorObjects).toHaveLength(2);
+  //   rerender(<BubblePage colors={res}/>);
+  //   colorObjects = screen.queryAllByTestId('colorTest');
+  //   expect(colorObjects).toHaveLength(2);
+
+  await waitFor(() => {
+		const aliceBlue = screen.getByText(/aliceblue/i);
+		const irishGreen = screen.getByText(/irishgreen/i);
+	
+		expect(aliceBlue).toBeInTheDocument();
+		expect(irishGreen).toBeInTheDocument();
+	});
 
 });
 
