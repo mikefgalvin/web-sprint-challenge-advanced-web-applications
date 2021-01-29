@@ -12,16 +12,14 @@ const BubblePage = () => {
   const [colorList, setColorList] = useState([]);
   const [status, setStatus] = useState('loading')
 
-  // const token = localStorage.getItem('token');
-  // console.log('token', token)
 
+
+  //If testing switch get to fetchFiles, if not, leave on axiosWithAuth()get()
   const getData = () => {
-    fetchFiles()
+    // fetchFiles()
+    axiosWithAuth().get('colors')
       .then (res => {
         setColorList(res.data)
-        // this.setState({
-        //   friends: res.data
-        // })
       })
       // .catch (err => {
       //   console.log(err.response)
@@ -41,10 +39,6 @@ const BubblePage = () => {
   }
 
   const updateColors = (colorIn) => {
-		// const idx = colorList.findIndex(el => el.id === colorIn.id);
-		// if (idx !== -1) {
-		// 	setColorList([...colorList, colorList[idx] = { ...colorIn }]);
-    // }
     
       setColorList(colorList.map(color => {
         if(color.id === colorIn.id) {

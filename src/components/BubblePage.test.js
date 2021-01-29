@@ -36,14 +36,6 @@ test("Fetches data and renders the bubbles on mounting", async () => {
   fetchFiles.mockResolvedValueOnce(res)
   const { rerender } = render(<BubblePage colors={[]}/>);
 
-  // let colorObjects = screen.queryAllByTestId('colorTest');
-  //   expect(colorObjects).toStrictEqual([]);
-  //   expect(colorObjects).toHaveLength(0);
-
-  //   rerender(<BubblePage colors={res}/>);
-  //   colorObjects = screen.queryAllByTestId('colorTest');
-  //   expect(colorObjects).toHaveLength(2);
-
   await waitFor(() => {
 		const aliceBlue = screen.getByText(/aliceblue/i);
 		const irishGreen = screen.getByText(/irishgreen/i);

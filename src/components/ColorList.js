@@ -10,8 +10,6 @@ const initialColor = {
 const ColorList = ({ colors, updateColors, triggerLoad }) => {
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
-  // const params = useParams();
-  // const paramId = props.match.params.id;
 
 
   const editColor = color => {
@@ -27,8 +25,7 @@ const ColorList = ({ colors, updateColors, triggerLoad }) => {
       .then(res => {
         console.log('res', res)
         updateColors(res.data)
-        // push(`/bubbles`)
-        // window.location.href = `/bubbles`
+        setEditing(false)
       })
       .catch(err => {
         console.log(err)
@@ -41,9 +38,6 @@ const ColorList = ({ colors, updateColors, triggerLoad }) => {
     .then( res => {
       console.log('delete', res)
       triggerLoad();
-      // updateColors(res.data)
-      // push(`/bubbles`)
-      // window.location.reload();
     })
     .catch(err => {
       console.log('error:', err)
